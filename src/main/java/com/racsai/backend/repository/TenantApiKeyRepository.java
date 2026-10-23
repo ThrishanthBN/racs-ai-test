@@ -16,12 +16,13 @@ public interface TenantApiKeyRepository extends JpaRepository<TenantApiKey, Stri
     // Query 72: Input and Encrypt Client API Key using MySQL AES_ENCRYPT and ON DUPLICATE KEY UPDATE
     @Modifying
     @Query(value = """
-        INSERT INTO tenant_api_keys (key_id, workspace_id, provider_name, encrypted_api_key, configured_by)
-        VALUES (:keyId, :workspaceId, :providerName, AES_ENCRYPT(:rawApiKey, 'SUPER_SECRET_SERVER_MASTER_KEY_STRING'), :userId)
+        INSERT INTO tenant_api_keys (key_id, workspace_id, provider_name, encrypted_api_key, configured_by, is_active, created_at, updated_at)
+        VALUES (:keyId, :workspaceId, :providerName, AES_ENCRYPT(:rawApiKey, 'SUPER_SECRET_SERVER_MASTER_KEY_STRING'), :userId, TRUE, NOW(), NOW())
         ON DUPLICATE KEY UPDATE 
         provider_name = :providerName,
         encrypted_api_key = AES_ENCRYPT(:rawApiKey, 'SUPER_SECRET_SERVER_MASTER_KEY_STRING'),
-        configured_by = :userId
+        configured_by = :userId,
+        updated_at = NOW()
         """, nativeQuery = true)
     void upsertEncryptedApiKey(
             @Param("keyId") String keyId,

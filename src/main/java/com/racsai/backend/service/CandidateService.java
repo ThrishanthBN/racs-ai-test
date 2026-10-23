@@ -33,8 +33,8 @@ public class CandidateService {
         
         // Query 30: System Backend Validation for File Type and Size (Max 5MB)
         String type = request.getFileType().toLowerCase();
-        if (!type.equals("pdf") && !type.equals("docx")) {
-            throw new IllegalArgumentException("Invalid file format. Only PDF and DOCX are allowed.");
+        if (!type.equals("pdf") && !type.equals("docx") && !type.equals("txt")) {
+            throw new IllegalArgumentException("Invalid file format. Only PDF, DOCX, and TXT are allowed.");
         }
         if (request.getFileSizeKb() > 5120) {
             throw new IllegalArgumentException("File exceeds the 5MB upload limit.");
